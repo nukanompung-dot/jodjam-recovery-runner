@@ -1,12 +1,20 @@
 /** Inspection is an accidental-rollout guard. Server rules and the human owner remain authoritative. */
 import { pathToFileURL } from 'node:url';
 const CHECK='public-runner-tests', APP_ID=15368;
-export function assertTrustedAutomation(branch,environment,policies,{repository,customRules,sourceSha,ownerAuditSha,ownerAuditAt,now=Date.now()}={}){
+export function assertTrustedAutomation(branch,environment,policies,{repository,expectedRepository,customRules,sourceSha,ownerAuditSha,ownerAuditAt,now=Date.now()}={}){
  if(repository?.private!==false||repository?.visibility!=='public'||repository.default_branch!=='main'||repository.archived!==false||repository.disabled!==false||repository.fork!==false)throw new Error('public_dedicated_repository_required');
  const review=branch?.required_pull_request_reviews,checks=branch?.required_status_checks;
  if(branch?.enforce_admins?.enabled!==true||!Number.isSafeInteger(review?.required_approving_review_count)||review.required_approving_review_count<1||review.dismiss_stale_reviews!==true||review.require_last_push_approval!==true||checks?.strict!==true||!Array.isArray(checks.contexts)||!checks.contexts.includes(CHECK)||!Array.isArray(checks.checks)||!checks.checks.some(check=>check.context===CHECK&&check.app_id===APP_ID)||branch.allow_force_pushes?.enabled!==false||branch.allow_deletions?.enabled!==false)throw new Error('protected_main_required');
  const bypass=review.bypass_pull_request_allowances;
- if(!bypass||['users','teams','apps'].some(kind=>!Array.isArray(bypass[kind])||bypass[kind].length))throw new Error('review_bypass_denied');
+ // GitHub permits bypass actors only on organization-owned repositories.
+ // Accept omission only for an exactly bound trusted personal-repo response;
+ // null/partial/unknown organization metadata is never an empty bypass list.
+ const personalOmission=bypass===undefined&&!Object.hasOwn(review,'bypass_pull_request_allowances')
+  &&typeof expectedRepository==='string'&&/^[A-Za-z0-9_-]+\/[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(expectedRepository)&&!expectedRepository.includes('..')
+  &&repository.owner?.type==='User'&&typeof repository.owner.login==='string'
+  &&repository.owner.login.toLowerCase()===expectedRepository.split('/')[0].toLowerCase()
+  &&typeof repository.full_name==='string'&&repository.full_name.toLowerCase()===expectedRepository.toLowerCase();
+ if(!personalOmission&&(!bypass||['users','teams','apps'].some(kind=>!Array.isArray(bypass[kind])||bypass[kind].length)))throw new Error('review_bypass_denied');
  if(environment?.deployment_branch_policy?.custom_branch_policies!==true||environment.deployment_branch_policy.protected_branches!==false||!Array.isArray(policies?.branch_policies)||policies.branch_policies.length!==1||policies.branch_policies[0].name!=='main'||policies.branch_policies[0].type!=='branch')throw new Error('main_only_environment_required');
  if(!Array.isArray(environment.protection_rules)||environment.protection_rules.some(rule=>rule.type!=='branch_policy')||customRules?.total_count!==0||!Array.isArray(customRules.custom_deployment_protection_rules)||customRules.custom_deployment_protection_rules.length)throw new Error('unexpected_manual_or_custom_environment_rule');
  const at=Date.parse(ownerAuditAt);
@@ -22,6 +30,6 @@ export async function verifyProtection({repository,sourceSha,token,ownerAuditSha
  const read=async(path,authenticated=false)=>json(await fetcher(`https://api.github.com/repos/${repository}${path}`,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',...(authenticated?{Authorization:`Bearer ${token}`}:{})},redirect:'error',signal:AbortSignal.timeout(10000)}));
  const [repo,branch,current,environment,policies,customRules]=await Promise.all([read(''),read('/branches/main/protection',true),read('/branches/main'),read('/environments/security-backup'),read('/environments/security-backup/deployment-branch-policies?per_page=100'),read('/environments/security-backup/deployment_protection_rules')]);
  if(repo.full_name?.toLowerCase()!==repository.toLowerCase()||current.name!=='main'||current.commit?.sha!==sourceSha)throw new Error('reviewed_main_source_moved');
- return assertTrustedAutomation(branch,environment,policies,{repository:repo,customRules,sourceSha,ownerAuditSha,ownerAuditAt,now});
+ return assertTrustedAutomation(branch,environment,policies,{repository:repo,expectedRepository:repository,customRules,sourceSha,ownerAuditSha,ownerAuditAt,now});
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){try{if(process.env.GITHUB_REF!=='refs/heads/main')throw new Error();await verifyProtection({repository:process.env.GITHUB_REPOSITORY,sourceSha:process.env.GITHUB_SHA,token:process.env.GH_PROTECTION_METADATA_TOKEN,ownerAuditSha:process.env.RECOVERY_POLICY_REVIEWED_SHA,ownerAuditAt:process.env.RECOVERY_POLICY_REVIEWED_AT});console.log('Public runner machine policy inspected; exact-source owner audit recorded. Hosted backup readiness remains separate.');}catch{console.error('Unattended recovery blocked: require dedicated read-only metadata audit, reviewed protected main, main-only environment and fresh owner settings review. No credentials or provider configuration are printed.');process.exitCode=1;}}

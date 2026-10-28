@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceCommit": "9680d29b10c8f9fb174ec2e9a27294642a8ceeea",
+  "sourceCommit": "97c058ba3b45cc27733a53cdaab13966ef577ecd",
   "files": [
     {
       "path": ".github/workflows/ci.yml",
@@ -14,8 +14,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "0216f0ce5fd0d586772347bc79d9842b6ae4249b0fa8a98083574e3bfae99b8c",
-      "bytes": 7084
+      "sha256": "7385dc1d8a07463485d145740f20c44cc1a5e817003da35d165de9f2f0568834",
+      "bytes": 7929
     },
     {
       "path": "scripts/recovery/backup.mjs",
@@ -64,13 +64,13 @@
     },
     {
       "path": "scripts/security/verify-ci-protection.mjs",
-      "sha256": "43f4e45e06b5f65a4a31153ee9914da6e91482301d4144aad43ec78c5fb65dfd",
-      "bytes": 5191
+      "sha256": "e016a1c8ca22cd31c85e96165c2e4a9a976b98c4fdcbc4db150155dd29560ae3",
+      "bytes": 6024
     },
     {
       "path": "scripts/security/verify-ci-protection.test.mjs",
-      "sha256": "2d3dce8849ad951e4e34ea35f65efe9eb94b6afbfde05b4b888b16959a4ea34d",
-      "bytes": 3389
+      "sha256": "e35c7f894fb60057399d455f83e8cce47cff8bed407db4a903348d585e74ae51",
+      "bytes": 6436
     },
     {
       "path": "scripts/security/verify-export-manifest.mjs",
