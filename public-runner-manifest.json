@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "sourceCommit": "9680d29b10c8f9fb174ec2e9a27294642a8ceeea",
+  "files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "7fbbad3fff6665f9c7a94f8ae1b1bd1dd92d1ad1674726c3b896bbbae3e79ec3",
+      "bytes": 758
+    },
+    {
+      "path": ".github/workflows/security-backup.yml",
+      "sha256": "49bd7ad16538b633eec66355ad6a8f1fa9339ba1913b6468b91785a8ca7e5258",
+      "bytes": 5470
+    },
+    {
+      "path": "README.md",
+      "sha256": "0216f0ce5fd0d586772347bc79d9842b6ae4249b0fa8a98083574e3bfae99b8c",
+      "bytes": 7084
+    },
+    {
+      "path": "scripts/recovery/backup.mjs",
+      "sha256": "146380af1b6cb89bd57415fdbcc200555809028ffa3608c7ecc82b9da5e9c93d",
+      "bytes": 12030
+    },
+    {
+      "path": "scripts/recovery/drive.mjs",
+      "sha256": "940f68ff399fd21990d4f0af2f5b60238fbfa1b43fdb23a6bc7db76a0c62a69b",
+      "bytes": 9605
+    },
+    {
+      "path": "scripts/recovery/fake-drive.test-support.mjs",
+      "sha256": "11d348ea07e93c0c7d959e3d74df031baff8aa6f43b3f6d425c5869c59bf6c27",
+      "bytes": 4975
+    },
+    {
+      "path": "scripts/recovery/health.mjs",
+      "sha256": "035adca0dc4627c45af68c20329703b6c213ecb4dbe3ccf46b27e134853404c5",
+      "bytes": 1715
+    },
+    {
+      "path": "scripts/recovery/io.mjs",
+      "sha256": "04578eb4f2a9d5dae9df721f3e29f6a3ce5b7cc6d624fc3101d998bb53b7a1fd",
+      "bytes": 5056
+    },
+    {
+      "path": "scripts/recovery/postgres.mjs",
+      "sha256": "c08200e1470d72d1a89e1549ae1f970faa294147743dfbb707cac4b0b2daa70c",
+      "bytes": 11184
+    },
+    {
+      "path": "scripts/recovery/retention.mjs",
+      "sha256": "35c5f2b8e3ec99804ac104dcca23683c262b688e810c60fbc470ebc43989100d",
+      "bytes": 3541
+    },
+    {
+      "path": "scripts/recovery/scope-policy.mjs",
+      "sha256": "59f610de5b10ab5ab82e6fdd8881535f62cc5e03abe1e3ffd1e47b0e0357205d",
+      "bytes": 2176
+    },
+    {
+      "path": "scripts/recovery/unit.test.mjs",
+      "sha256": "0cd789201aa26082decc2b6b57af1b12769896f200343bd5531f20dc76591709",
+      "bytes": 7559
+    },
+    {
+      "path": "scripts/security/verify-ci-protection.mjs",
+      "sha256": "43f4e45e06b5f65a4a31153ee9914da6e91482301d4144aad43ec78c5fb65dfd",
+      "bytes": 5191
+    },
+    {
+      "path": "scripts/security/verify-ci-protection.test.mjs",
+      "sha256": "2d3dce8849ad951e4e34ea35f65efe9eb94b6afbfde05b4b888b16959a4ea34d",
+      "bytes": 3389
+    },
+    {
+      "path": "scripts/security/verify-export-manifest.mjs",
+      "sha256": "43c1a96526fe578e52f7eb367ef344178c64cd649f8688b3b3c38a3a04b4813a",
+      "bytes": 2188
+    },
+    {
+      "path": "scripts/security/verify-export-manifest.test.mjs",
+      "sha256": "b606aed7d56e38b7ddea380f7a146bc3daf5066200a76f5b3bf6742452b3b108",
+      "bytes": 1215
+    }
+  ]
+}
